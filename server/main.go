@@ -1,32 +1,13 @@
 package main
 
 import (
-	"fmt"
-	"log"
+	// "fmt"
+	// "log"
 
-	"github.com/Jewels2001/LlamaFeeders/server/inference"
+	// "github.com/Jewels2001/LlamaFeeders/server/inference"
+	"github.com/Jewels2001/LlamaFeeders/server/eventGen"
 )
 
 func main() {
-	messages := []inference.OllamaMsg{
-		{
-			Role:    "user",
-			Content: "Why is the sky blue?",
-		},
-		{
-			Role:    "assistant",
-			Content: "Idk bro",
-		},
-		{
-			Role:    "user",
-			Content: "Wdym you don't know?",
-		},
-	}
-
-	msg, err := inference.GetChatCompletion(messages)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println("Message:", msg.Content)
+	event_msg, err = eventGen.EventGen()
 }
