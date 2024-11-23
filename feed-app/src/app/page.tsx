@@ -5,6 +5,7 @@ import Post from "@components/Post";
 // import NPost from "@components/NPost"
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import PlayCircleFilledWhiteIcon from "@mui/icons-material/PlayCircleFilledWhite";
+import config from "../config.json";
 
 interface PostData {
   name: string;
@@ -73,8 +74,27 @@ const Home: React.FC = () => {
     if (e.key === "Enter" && prompt.trim() !== "") {
       setIsGenerating(true);
       setStart(true);
-      setPosts([generateRandomPost()]); // Start with a new post
+
+      createNewEvent();
+      setPosts([generateRandomPost()]);
     }
+  };
+
+  const createNewEvent = async () => {
+      const response = await fetch(config.createNewEventEndpoint, {
+        method: 'POST', // Specify the request method
+        headers: {
+          'Content-Type': 'application/json', // Indicate we're sending JSON
+        },
+        body: JSON.stringify({ eventText: prompt }), // Convert JavaScript object to JSON string
+      });
+
+      if (response.ok) {
+        console.log('Event created successfully');
+      } else {
+        console.error('Failed to create event');
+      }
+
   };
 
   const stopGenerating = () => {
