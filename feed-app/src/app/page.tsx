@@ -14,12 +14,20 @@ interface PostData {
   comments: string;
   personality: string[];
   education: string;
+  profilePicture: string; 
 }
 
 interface NewsProps{
     name: string;
     news: string;
 }
+
+const images = [ 
+ '/profiles/Anonymous-Profile-pic.jpg',
+ '/profiles/Llama_1.webp',
+ '/profiles/Llama_2.jpg',
+ '/profiles/Llama_3.jpg',
+]
 
 const Home: React.FC = () => {
   const [posts, setPosts] = useState<PostData[]>([]);
@@ -46,6 +54,7 @@ const Home: React.FC = () => {
       comments: comments,
       personality: personality,
       education: education,
+      profilePicture: images[Math.floor(Math.random() * images.length)],
     };
 
   };
@@ -61,6 +70,7 @@ const Home: React.FC = () => {
       comments: comments,
       personality: ["oe: 0.6", "co: 0.8", "ex: 0.4", "ag: 0.7", "ne: 0.3"],
       education: 'LLama uni',
+      profilePicture: '/profiles/llama_feeders.png',
     };
 
   };
@@ -108,6 +118,14 @@ const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
+      <div className="fixed top-0 left-10 flex justify-center items-center flex-col mt-4">
+        {/* Logo */}
+        <img
+          src="/profiles/llama_feeders.png"
+          alt="Llama Feeders Logo"
+          className="w-32 h-auto mb-4"
+        />
+      </div>
       <h1 className="text-3xl font-bold text-center mb-6 text-black dark:text-black">
         Live LLAMA Feed
       </h1>
@@ -120,8 +138,8 @@ const Home: React.FC = () => {
             value={prompt}
             onChange={(e) => handlePromptChange(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Enter Prompt"
-            className="border px-2 py-1 rounded text-gray-900 dark:text-white bg-white dark:bg-gray-800 max-w-[50%] w-[50%]"
+            placeholder="Enter an Event"
+            className="border px-2 py-1 rounded text-gray-900 dark:text-white bg-white dark:bg-gray-800  w-[100%]"
           />
         </div>
 
