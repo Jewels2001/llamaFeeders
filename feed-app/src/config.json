@@ -1,4 +1,5 @@
 {
     "createNewEventEndpoint" : "http://195.242.13.195:8081/api/createNewEvent",
-    "getEventsEndpoint" : "http://195.242.13.195:8081/api/getEvents"
+    "getEventsEndpoint" : "http://195.242.13.195:8081/api/getEvents",
+    "getUserDataEndpoint" : "http://195.242.13.195:8081/api/getUserData"
 }
