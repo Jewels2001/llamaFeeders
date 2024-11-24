@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Post from "@components/Post";
-// import NPost from "@components/NPost"
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import PlayCircleFilledWhiteIcon from "@mui/icons-material/PlayCircleFilledWhite";
 import config from "../config.json";
@@ -15,7 +14,8 @@ interface PostData {
   comments: string;
   personality: Personality;
   education: string;
-  profilePicture: string
+  profilePicture: string;
+  id: string;
 }
 
 interface Personality{
@@ -23,9 +23,8 @@ interface Personality{
     co: number ,
     ex: number ,
     ag: number ,
-    ne: number 
+    ne: number ,
 }
-
 
 const images = [ 
  '/profiles/Anonymous-Profile-pic.jpg',
@@ -48,7 +47,8 @@ const Home: React.FC = () => {
     interestsList:  string[] = ["Reading", "Traveling", "Gaming", "Cooking", "Sports"],
     comments: string = "Great post!",
     personality: Personality = {'oe': 0.6, 'co': 0.8, 'ex': 0.4, 'ag': 0.7, 'ne' : 0.3},
-    education: string = 'Batchlor'
+    education: string = 'Batchlor',
+    id: string = '112'
   ): PostData => {
     
     return {
@@ -60,6 +60,7 @@ const Home: React.FC = () => {
       personality: personality,
       education: education,
       profilePicture: images[Math.floor(Math.random() * images.length)],
+      id: id,
     };
 
   };

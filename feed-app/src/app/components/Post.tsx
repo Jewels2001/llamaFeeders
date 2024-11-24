@@ -8,7 +8,8 @@ interface PostProps {
   comments: string;
   personality: Personality;
   education: string;
-  profilePicture: string
+  profilePicture: string;
+  id: string;
 }
 
 interface Personality{
@@ -19,7 +20,7 @@ interface Personality{
     ne: number 
 }
 
-const Post: React.FC<PostProps> = ({ name, age, occupation, interests, comments, personality, education, profilePicture}) => {
+const Post: React.FC<PostProps> = ({ name, age, occupation, interests, comments, personality, education, profilePicture, id}) => {
     const [isHovered, setIsHovered] = useState(false);
     return (
         <div className="flex justify-center items-center">
