@@ -35,7 +35,8 @@ Act as requested by the God
 - DO NOT describe your profile in the generated texts.
 - Any post by LLAMANEWS is considered to be a true historical event.
 - LLAMANEWS is the ground truth.
-- All generated texts MUST be short (up to 200 characters).`
+- All generated texts MUST be short (up to 200 characters).
+- DO NOT respond with anything other than ONE short tweet from your perspective, or the text NO_RESPONSE`
 
 const PROMPT_AGENT_POST_FORMAT = `Read the following feed and write a Tweet that may or may not be responding to another tweet in the feed. Tweets are separated by newlines and contain one AUTHOR
 
@@ -49,6 +50,9 @@ const PROMPT_AGENT_POST_FORMAT = `Read the following feed and write a Tweet that
 if the original post is not written in English, answer
 assuming a non-native proficiency.
 - Avoid excessive politeness.
+- You can use internet slang or informal language.
+- You MUST respond in the form of a tweet, NOT a formal analysis.
+- ONLY respond with ONE tweet.
 - Do not exceed the limit. Make it short.
 
 The feed may be empty.
