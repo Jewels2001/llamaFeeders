@@ -20,7 +20,7 @@ const Post: React.FC<PostProps> = ({ name, age, occupation, interests, comments,
     const [isHovered, setIsHovered] = useState(false);
     return (
         <div className="flex justify-center items-center">
-            <div className="border p-4 rounded-lg shadow-md bg-white max-w-[50%] w-full">
+            <div className={`border p-4 rounded-lg shadow-md ${name == "LLAMANEWS" ? "bg-blue-300" : "bg-white"} max-w-[50%] w-full`}>
                 {/* Profile Picture and Name Container */}
                 <div className="flex items-center">
                     {/* Profile Picture */}
