@@ -9,36 +9,24 @@ import config from "../config.json";
 interface getData {
   author: string;
   messages: string;
-  commentId: string;
+  commentId: number;
 }
-interface getData {
-  author: string;
-  messages: string;
-  commentId: string;
-}
+
 interface PostData {
   author: string;
   messages: string;
   commentId: string;
   profilePicture: string;
 }
-interface userInfo{
-  author: string;
-  author: string;
-  messages: string;
-  commentId: string;
-  profilePicture: string;
-}
+
 interface userInfo{
   author: string;
   age: number;
   occupation: string;
   interests: string[];
   personality: Personality;
-  personality: Personality;
   education: string;
   profilePicture: string;
-  profilePicture: string;
 }
 
 interface Personality{
@@ -46,16 +34,10 @@ interface Personality{
     co: number ,
     ex: number ,
     ag: number ,
-    ne: number ,
-interface Personality{
-    oe: number ,
-    co: number ,
-    ex: number ,
-    ag: number ,
-    ne: number ,
+    ne: number
 }
 
-const images = [ 
+const fakeImages = [ 
  '/profiles/Anonymous-Profile-pic.jpg',
  '/profiles/Llama_1.webp',
  '/profiles/Llama_2.jpg',
@@ -64,66 +46,12 @@ const images = [
 
 const Home: React.FC = () => {
   const [posts, setPosts] = useState<getData[]>([]);
-  const [posts, setPosts] = useState<getData[]>([]);
   const [updateInterval, setUpdateInterval] = useState<number>(4000);
   const [prompt, setPrompt] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [start, setStart] = useState<boolean>(false);
 
-  // // Mock function to generate random posts
-  // const generateRandomPost = (
-  //   author: string | string[] = ["Alice", "Bob", "Charlie", "Dana", "Eve"],
-  //   occupations: string | string[] = ["Engineer", "Doctor", "Artist", "Teacher", "Designer"],
-  //   interestsList:  string[] = ["Reading", "Traveling", "Gaming", "Cooking", "Sports"],
-  //   messages: string = "Great post!",
-  //   personality: Personality = {'oe': 0.6, 'co': 0.8, 'ex': 0.4, 'ag': 0.7, 'ne' : 0.3},
-  //   education: string = 'Batchlor',
-  //   id: string = '112'
-  // ): PostData => {
-    
-  //   return {
-  //     name: author[Math.floor(Math.random() * author.length)],
-  //     age: Math.floor(Math.random() * 40) + 20,
-  //     occupation: occupations[Math.floor(Math.random() * occupations.length)],
-  //     interests: interestsList.sort(() => 0.5 - Math.random()).slice(0, 2),
-  //     messages: messages,
-  //     personality: personality,
-  //     education: education,
-  //     profilePicture: images[Math.floor(Math.random() * images.length)],
-  //     id: id,
-  //   };
-
-  // };
-
-  // // Mock function to generate random posts
-  // const generateRandomPost = (
-  //   author: string | string[] = ["Alice", "Bob", "Charlie", "Dana", "Eve"],
-  //   occupations: string | string[] = ["Engineer", "Doctor", "Artist", "Teacher", "Designer"],
-  //   interestsList:  string[] = ["Reading", "Traveling", "Gaming", "Cooking", "Sports"],
-  //   messages: string = "Great post!",
-  //   personality: Personality = {'oe': 0.6, 'co': 0.8, 'ex': 0.4, 'ag': 0.7, 'ne' : 0.3},
-  //   education: string = 'Batchlor',
-  //   id: string = '112'
-  // ): PostData => {
-    
-  //   return {
-  //     name: author[Math.floor(Math.random() * author.length)],
-  //     age: Math.floor(Math.random() * 40) + 20,
-  //     occupation: occupations[Math.floor(Math.random() * occupations.length)],
-  //     interests: interestsList.sort(() => 0.5 - Math.random()).slice(0, 2),
-  //     messages: messages,
-  //     personality: personality,
-  //     education: education,
-  //     profilePicture: images[Math.floor(Math.random() * images.length)],
-  //     id: id,
-  //   };
-
-  // };
-
   const generateRandomPost = (
-    Author: string | string[] = ["Alice", "Bob", "Charlie", "Dana", "Eve"],
-    messages: string = "Great post!",
-    id: string = '112'
     Author: string | string[] = ["Alice", "Bob", "Charlie", "Dana", "Eve"],
     messages: string = "Great post!",
     id: string = '112'
@@ -132,10 +60,7 @@ const Home: React.FC = () => {
     return {
       author: Author[Math.floor(Math.random() * Author.length)],
       messages: messages,
-      author: Author[Math.floor(Math.random() * Author.length)],
-      messages: messages,
-      profilePicture: images[Math.floor(Math.random() * images.length)],
-      commentId: id,
+      profilePicture: fakeImages[Math.floor(Math.random() * fakeImages.length)],
       commentId: id,
     };
 
@@ -143,14 +68,12 @@ const Home: React.FC = () => {
 
   const generateNews = (
     messages: string = "BREAKING NEWS! Ninja got a low taper fadeeee",
-    messages: string = "BREAKING NEWS! Ninja got a low taper fadeeee",
   ) => {
     return {
       name: 'LLAMANEWS',
       age: 100,
       occupation: 'News Reporter',
       interests: ['eating grass'],
-      messages: messages,
       messages: messages,
       personality: ["oe: 0.6", "co: 0.8", "ex: 0.4", "ag: 0.7", "ne: 0.3"],
       education: 'LLama uni',
@@ -162,7 +85,6 @@ const Home: React.FC = () => {
     setPrompt(newPrompt);
   };
 
-  const handleButtonPress = () => {
   const handleButtonPress = () => {
       setIsGenerating(true);
       setStart(true);
@@ -186,6 +108,14 @@ const Home: React.FC = () => {
       }
 
   };
+
+  const getPfpPath = (author: string): string => {
+
+    const basePath = "../imgs/picsum_images/"; 
+    const authorToNum = (author.charCodeAt(0) % 100) + 1;
+    return `${basePath}$image_{authorToNum}.jpg`;
+  }
+
 
   const stopGenerating = () => {
     setIsGenerating(false);
@@ -232,26 +162,7 @@ const Home: React.FC = () => {
         } catch (error) {
           console.error('Fetch error:', error); 
         }
-        
-
-      const interval = setInterval(async () => {
-
-        try {
-          const response = await fetch(config.getEventsEndpoint);
-          
-          if (!response.ok) {
-            throw new Error(`Error: ${response.status} - ${response.statusText}`);
-          }
-        
-          const data : getData[] = await response.json(); 
-          console.log(data); 
-
-          setPosts(posts => [...data, ...posts]);
-
-          
-        } catch (error) {
-          console.error('Fetch error:', error); 
-        }
+    
         
 
         counter += updateInterval / 1000; // Increment based on interval in seconds
@@ -343,7 +254,7 @@ const Home: React.FC = () => {
       {/* main post stuff */}
       <div className="space-y-4">
         {posts.map((post, index) => (
-          <Post key={index} {...post} />
+          <Post key={index} {...{author : post.author, commentContent: post.messages, id: post.commentId, profilePicture: getPfpPath(post.author)}} />
         ))}
       </div>
        {/* Task bar at the side post stuff */}
@@ -364,5 +275,4 @@ const Home: React.FC = () => {
     </div>
   );
 };
-
 export default Home;

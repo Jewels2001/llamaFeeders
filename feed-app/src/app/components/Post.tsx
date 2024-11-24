@@ -1,15 +1,20 @@
 import React, { useState } from "react";
 
 interface PostProps {
-  name: string;
-  age: number;
-  occupation: string;
-  interests: string[];
-  comments: string;
-  personality: Personality;
-  education: string;
+  author: string;
+  commentContent: string;
+  id: number;
   profilePicture: string;
-  id: string;
+}
+import config from "../../config.json";
+interface userInfo{
+    Author: string;
+    Age: number;
+    Occupation: string;
+    Interests: string[];
+    Personality: Personality;
+    Education: string;
+    ProfilePicture: string;
 }
 
 interface Personality{
@@ -20,49 +25,62 @@ interface Personality{
     ne: number 
 }
 
-const Post: React.FC<PostProps> = ({ name, comments, id, profilePicture}) => {
+
+
+const Post: React.FC<PostProps> = ({ author, commentContent, id, profilePicture}) => {
     const [isHovered, setIsHovered] = useState(false);
+    const [userData, setUserData] = useState<userInfo | null>(null);
+    const getUserData = async (Author: string)=> {
+        const response = await fetch(`${config.getUserDataEndpoint}?Author=${Author}`);
+        
+        if (!response.ok) {
+          throw new Error("Failed to fetch user data");
+        }
+      
+        const data: userInfo = await response.json();
+        setUserData(data);
+      }
     return (
         <div className="flex justify-center items-center">
-            <div className={`border p-4 rounded-lg shadow-md ${name == "LLAMANEWS" ? "bg-blue-300" : "bg-white"} max-w-[50%] w-full`}>
+            <div className={`border p-4 rounded-lg shadow-md ${author == "LLAMANEWS" ? "bg-blue-300" : "bg-white"} max-w-[50%] w-full`}>
                 {/* Profile Picture and Name Container */}
                 <div className="flex items-center">
                     {/* Profile Picture */}
                 <img
                 src={profilePicture}
-                alt={`${name}'s profile`}
+                alt={`${author}'s profile`}
                 className="w-16 h-16 rounded-full object-cover"
                 />
                 {/* Name with hover effect */}
                 <div className="inline-block pl-4">
                     <h2
                     className="text-xl font-bold relative"
-                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseEnter={() => {setIsHovered(true); getUserData(author)}}
                     onMouseLeave={() => setIsHovered(false)}
                     >
-                    {name}
+                    {author}
                     {/* Tooltip */}
                     {isHovered && (
                         <div className="absolute top-full left-0 mt-2 w-64 bg-gray-800 text-white text-sm p-2 rounded shadow-md z-10">
                         <p>
-                            <strong>Age:</strong> {age}
+                            <strong>Age:</strong> {userData?.Age}
                         </p>
                         <p>
-                            <strong>Education</strong> {education}
+                            <strong>Education</strong> {userData?.Education}
                         </p>
                         <p>
-                            <strong>Occupation:</strong> {occupation}
+                            <strong>Occupation:</strong> {userData?.Occupation}
                         </p>
                         <p>
-                            <strong>Interests:</strong> {interests.join(", ")}
+                            <strong>Interests:</strong> {userData?.Interests.join(", ")}
                         </p>
                         <p>
                             <strong>Personality</strong> 
-                            <p>Openness {personality.oe}</p>
-                            <p>Conscientiousness{personality.co}</p>
-                            <p>Extraversion{personality.ex}</p>
-                            <p>Agreeableness{personality.ag}</p>
-                            <p>Neuroticism{personality.ne}</p>
+                            <p>Openness {userData?.Personality.oe}</p>
+                            <p>Conscientiousness{userData?.Personality.co}</p>
+                            <p>Extraversion{userData?.Personality.ex}</p>
+                            <p>Agreeableness{userData?.Personality.ag}</p>
+                            <p>Neuroticism{userData?.Personality.ne}</p>
                         </p>
                         </div>
                     )}
@@ -73,7 +91,7 @@ const Post: React.FC<PostProps> = ({ name, comments, id, profilePicture}) => {
                 <h3 className="font-semibold">Comments:</h3>
                 <ul className="list-disc list-inside text-gray-600">
                     
-                    <li>{comments}</li>
+                    <li>{commentContent}</li>
                 </ul>
                 
             </div>
