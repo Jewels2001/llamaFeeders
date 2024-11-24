@@ -5,7 +5,7 @@ import Post from "@components/Post";
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import PlayCircleFilledWhiteIcon from "@mui/icons-material/PlayCircleFilledWhite";
 import config from "../config.json";
-//import SentimentAnalysis from "./components/SentAnalysis";
+import SentimentAnalysis from "./components/SentAnalysis";
 
 interface serverR{
   events: getData[];
@@ -310,7 +310,7 @@ const Home: React.FC = () => {
             </button>
           ))}
         </ul>
-        {/* {sentiFlag && <SentimentAnalysis messages={posts.map((post) => post.Message)} />} */}
+        {sentiFlag && <SentimentAnalysis messages={posts.map((post) => post.Message)} />}
       </div>
     </div>
   );
