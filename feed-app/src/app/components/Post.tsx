@@ -3,9 +3,9 @@ import React, { useState } from "react";
 interface PostProps {
   author: string;
   commentContent: string;
-  id: number;
   profilePicture: string;
 }
+
 import config from "../../config.json";
 interface userInfo{
     Author: string;
@@ -27,7 +27,7 @@ interface Personality{
 
 
 
-const Post: React.FC<PostProps> = ({ author, commentContent, id, profilePicture}) => {
+const Post: React.FC<PostProps> = ({ author, commentContent, profilePicture}) => {
     // const imagePaths = Array.from({ length: 100 }, (_, i) => `/images/image_${i + 1}.jpg`);
 
     const [isHovered, setIsHovered] = useState(false);
@@ -42,6 +42,7 @@ const Post: React.FC<PostProps> = ({ author, commentContent, id, profilePicture}
         const data: userInfo = await response.json();
         setUserData(data);
       }
+
     return (
         <div className="flex justify-center items-center">
             <div className={`border p-4 rounded-lg shadow-md ${author == "LLAMANEWS" ? "bg-blue-300" : "bg-white"} max-w-[50%] w-full`}>

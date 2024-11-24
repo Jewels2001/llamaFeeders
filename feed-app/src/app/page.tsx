@@ -1,21 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Post from "@components/Post";
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import PlayCircleFilledWhiteIcon from "@mui/icons-material/PlayCircleFilledWhite";
 import config from "../config.json";
 
+interface serverR{
+  events: getData[];
+  posts: getData[];
+}
+
 interface getData {
   Author: string;
   Message: string;
-  Id: number;
 }
 
 interface PostData {
   Author: string;
   Message: string;
-  Id: string;
+  //Id: string;
   profilePicture: string;
 }
 
@@ -28,10 +32,14 @@ const fakeImages = [
 
 const Home: React.FC = () => {
   const [posts, setPosts] = useState<getData[]>([]);
+  const [allevents, setEvents] = useState<getData[]>([]);
   const [updateInterval, setUpdateInterval] = useState<number>(4000);
   const [prompt, setPrompt] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [start, setStart] = useState<boolean>(false);
+  const [currevent, setcurrevent] = useState<string>("No Events Yet");
+  const queueRef = useRef<getData[]>([]);
+  const [postQueue, setPostQueue] = useState<getData[]>([]);
 
   const generateRandomPost = (
     Author: string | string[] = ["Alice", "Bob", "Charlie", "Dana", "Eve"],
@@ -43,7 +51,6 @@ const Home: React.FC = () => {
       Author: Author[Math.floor(Math.random() * Author.length)],
       Message: Message,
       profilePicture: fakeImages[Math.floor(Math.random() * fakeImages.length)],
-      Id: id,
     };
 
   };
@@ -135,17 +142,32 @@ const Home: React.FC = () => {
             throw new Error(`Error: ${response.status} - ${response.statusText}`);
           }
         
-          const data : getData[] = await response.json(); 
+          const data : serverR = await response.json();
+          const events : getData[] = data.events
+          const newposts : getData[] = data.posts
           console.log(data); 
 
-          setPosts(posts => [...data, ...posts]);
+          // setPosts(posts => [...events, ...newposts, ...posts]);
+          setPostQueue((prevQueue) => [...prevQueue, ...newposts]);
+          queueRef.current = [...queueRef.current, ...newposts];
+          // update the events to this
+          setEvents(pastevents => [...events, ...pastevents])
+          // send in post every 1 s 
+          const processQueueInterval = setInterval(() => {
+            if (queueRef.current.length > 0) {
+              const nextPost = queueRef.current.shift(); // Remove the first post from the queue
+              if (nextPost) {
+                setPosts((prevPosts) => [nextPost, ...prevPosts]); // Add it to the feed
+              }
+            }
+          }, 350); // 1 second between each post
 
+          setcurrevent(currevent => events[0].Message)
           
         } catch (error) {
           console.error('Fetch error:', error); 
         }
     
-        
 
         counter += updateInterval / 1000; // Increment based on interval in seconds
       }, updateInterval);
@@ -168,6 +190,13 @@ const Home: React.FC = () => {
       <h1 className="text-3xl font-bold text-center mb-6 text-black dark:text-black">
         Live LLAMA Feed
       </h1>
+      {/* Current Events Section
+      <div className=" bg-gray-100 dark:bg-gray-800 p-3 rounded-lg shadow-md max-w-3xl mx-auto">
+        <h2 className="text-2xl font-semibold mb-2 text-gray-700 dark:text-gray-300">
+          Current Event:
+        </h2>
+        <p className="text-lg text-gray-600 dark:text-gray-400">{currevent}</p>
+      </div> */}
       <div className="fixed mx-auto bottom-0 left-0 right-0 bg-white dark:bg-gray-800 bg-opacity-100 p-4 shadow-lg z-50 rounded-lg w-full max-w-[60%] bottom-4 p-4">
         {/* Prompt input */}
         <div className="text-center mb-4">
@@ -230,11 +259,33 @@ const Home: React.FC = () => {
         </div>
       </div>
       {/* main post stuff */}
-      <div className="space-y-4">
+        <div className="flex flex-wrap justify-left space-x-5">
+          {/* Posts Feed */}
+          <div className="w-full md:w-1/2 space-y-4">
+            <h2 className="text-xl font-bold mb-4 text-center">Posts Feed</h2>
+            {posts.map((post, index) => (
+                <Post key={`post-${index}`} {...{ author: post.Author, commentContent: post.Message, profilePicture: getPfpPath(post.Author) }}/>
+            ))}
+          </div>
+
+          {/* Events Feed */}
+          <div className="w-full md:w-1/3 space-y-4">
+            <h2 className="text-xl font-bold mb-4 text-center">Events Feed</h2>
+            {allevents.map((event, index) => (
+                <Post key={`event-${index}`} {...{ author: event.Author, commentContent: event.Message, profilePicture: getPfpPath(event.Author) }}/>
+              ))}
+          </div>
+        </div>
+      {/* <div className="space-y-4">
+        <h2 className="text-xl font-bold mb-4">Posts Feed</h2>
         {posts.map((post, index) => (
-          <Post key={index} {...{author : post.Author, commentContent: post.Message, id: post.Id, profilePicture: getPfpPath(post.Author)}} />
+          <Post key={index} {...{author : post.Author, commentContent: post.Message, profilePicture: getPfpPath(post.Author)}} />
         ))}
-      </div>
+        <h2 className="text-xl font-bold mb-4">Events Feed</h2>
+        {allevents.map((event, index) => (
+          <Post key={`event-${index}`} {...{author: event.Author, commentContent: event.Message, profilePicture: getPfpPath(event.Author)}} />
+        ))}
+      </div> */}
        {/* Task bar at the side post stuff */}
       <div className="fixed top-40 left-5 transform -translate-x-0 bg-gray-800 text-white rounded-lg shadow-lg p-4 w-64">
         <h2 className="text-lg font-bold mb-2">Task List</h2>
