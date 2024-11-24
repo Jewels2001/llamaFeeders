@@ -6,17 +6,21 @@ interface PostProps {
   occupation: string;
   interests: string[];
   comments: string;
-  personality: string[];
+  personality: Personality;
   education: string;
-  profilePicture: string
+  profilePicture: string;
+  id: string;
 }
 
-interface NewsProps{
-    name: string;
-    news: string;
+interface Personality{
+    oe: number ,
+    co: number ,
+    ex: number ,
+    ag: number ,
+    ne: number 
 }
 
-const Post: React.FC<PostProps> = ({ name, age, occupation, interests, comments, personality, education, profilePicture}) => {
+const Post: React.FC<PostProps> = ({ name, comments, id, profilePicture}) => {
     const [isHovered, setIsHovered] = useState(false);
     return (
         <div className="flex justify-center items-center">
@@ -53,10 +57,16 @@ const Post: React.FC<PostProps> = ({ name, age, occupation, interests, comments,
                             <strong>Interests:</strong> {interests.join(", ")}
                         </p>
                         <p>
-                            <strong>Personality</strong> {personality}
+                            <strong>Personality</strong> 
+                            <p>Openness {personality.oe}</p>
+                            <p>Conscientiousness{personality.co}</p>
+                            <p>Extraversion{personality.ex}</p>
+                            <p>Agreeableness{personality.ag}</p>
+                            <p>Neuroticism{personality.ne}</p>
                         </p>
                         </div>
                     )}
+
                     </h2>
                     </div>
                 </div>

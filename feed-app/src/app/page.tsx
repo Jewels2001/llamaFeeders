@@ -2,25 +2,57 @@
 
 import { useEffect, useState } from "react";
 import Post from "@components/Post";
-// import NPost from "@components/NPost"
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import PlayCircleFilledWhiteIcon from "@mui/icons-material/PlayCircleFilledWhite";
 import config from "../config.json";
 
+interface getData {
+  author: string;
+  messages: string;
+  commentId: string;
+}
+interface getData {
+  author: string;
+  messages: string;
+  commentId: string;
+}
 interface PostData {
-  name: string;
+  author: string;
+  messages: string;
+  commentId: string;
+  profilePicture: string;
+}
+interface userInfo{
+  author: string;
+  author: string;
+  messages: string;
+  commentId: string;
+  profilePicture: string;
+}
+interface userInfo{
+  author: string;
   age: number;
   occupation: string;
   interests: string[];
-  comments: string;
-  personality: string[];
+  personality: Personality;
+  personality: Personality;
   education: string;
-  profilePicture: string; 
+  profilePicture: string;
+  profilePicture: string;
 }
 
-interface NewsProps{
-    name: string;
-    news: string;
+interface Personality{
+    oe: number ,
+    co: number ,
+    ex: number ,
+    ag: number ,
+    ne: number ,
+interface Personality{
+    oe: number ,
+    co: number ,
+    ex: number ,
+    ag: number ,
+    ne: number ,
 }
 
 const images = [ 
@@ -31,63 +63,111 @@ const images = [
 ]
 
 const Home: React.FC = () => {
-  const [posts, setPosts] = useState<PostData[]>([]);
+  const [posts, setPosts] = useState<getData[]>([]);
+  const [posts, setPosts] = useState<getData[]>([]);
   const [updateInterval, setUpdateInterval] = useState<number>(4000);
   const [prompt, setPrompt] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [start, setStart] = useState<boolean>(false);
 
-  // Mock function to generate random posts
+  // // Mock function to generate random posts
+  // const generateRandomPost = (
+  //   author: string | string[] = ["Alice", "Bob", "Charlie", "Dana", "Eve"],
+  //   occupations: string | string[] = ["Engineer", "Doctor", "Artist", "Teacher", "Designer"],
+  //   interestsList:  string[] = ["Reading", "Traveling", "Gaming", "Cooking", "Sports"],
+  //   messages: string = "Great post!",
+  //   personality: Personality = {'oe': 0.6, 'co': 0.8, 'ex': 0.4, 'ag': 0.7, 'ne' : 0.3},
+  //   education: string = 'Batchlor',
+  //   id: string = '112'
+  // ): PostData => {
+    
+  //   return {
+  //     name: author[Math.floor(Math.random() * author.length)],
+  //     age: Math.floor(Math.random() * 40) + 20,
+  //     occupation: occupations[Math.floor(Math.random() * occupations.length)],
+  //     interests: interestsList.sort(() => 0.5 - Math.random()).slice(0, 2),
+  //     messages: messages,
+  //     personality: personality,
+  //     education: education,
+  //     profilePicture: images[Math.floor(Math.random() * images.length)],
+  //     id: id,
+  //   };
+
+  // };
+
+  // // Mock function to generate random posts
+  // const generateRandomPost = (
+  //   author: string | string[] = ["Alice", "Bob", "Charlie", "Dana", "Eve"],
+  //   occupations: string | string[] = ["Engineer", "Doctor", "Artist", "Teacher", "Designer"],
+  //   interestsList:  string[] = ["Reading", "Traveling", "Gaming", "Cooking", "Sports"],
+  //   messages: string = "Great post!",
+  //   personality: Personality = {'oe': 0.6, 'co': 0.8, 'ex': 0.4, 'ag': 0.7, 'ne' : 0.3},
+  //   education: string = 'Batchlor',
+  //   id: string = '112'
+  // ): PostData => {
+    
+  //   return {
+  //     name: author[Math.floor(Math.random() * author.length)],
+  //     age: Math.floor(Math.random() * 40) + 20,
+  //     occupation: occupations[Math.floor(Math.random() * occupations.length)],
+  //     interests: interestsList.sort(() => 0.5 - Math.random()).slice(0, 2),
+  //     messages: messages,
+  //     personality: personality,
+  //     education: education,
+  //     profilePicture: images[Math.floor(Math.random() * images.length)],
+  //     id: id,
+  //   };
+
+  // };
+
   const generateRandomPost = (
-    Username: string | string[] = ["Alice", "Bob", "Charlie", "Dana", "Eve"],
-    occupations: string | string[] = ["Engineer", "Doctor", "Artist", "Teacher", "Designer"],
-    interestsList:  string[] = ["Reading", "Traveling", "Gaming", "Cooking", "Sports"],
-    comments: string = "Great post!",
-    personality: string[] = ["oe: 0.6", "co: 0.8", "ex: 0.4", "ag: 0.7", "ne: 0.3"],
-    education: string = 'Batchlor'
+    Author: string | string[] = ["Alice", "Bob", "Charlie", "Dana", "Eve"],
+    messages: string = "Great post!",
+    id: string = '112'
+    Author: string | string[] = ["Alice", "Bob", "Charlie", "Dana", "Eve"],
+    messages: string = "Great post!",
+    id: string = '112'
   ): PostData => {
     
     return {
-      name: Username[Math.floor(Math.random() * Username.length)],
-      age: Math.floor(Math.random() * 40) + 20,
-      occupation: occupations[Math.floor(Math.random() * occupations.length)],
-      interests: interestsList.sort(() => 0.5 - Math.random()).slice(0, 2),
-      comments: comments,
-      personality: personality,
-      education: education,
+      author: Author[Math.floor(Math.random() * Author.length)],
+      messages: messages,
+      author: Author[Math.floor(Math.random() * Author.length)],
+      messages: messages,
       profilePicture: images[Math.floor(Math.random() * images.length)],
+      commentId: id,
+      commentId: id,
     };
 
   };
 
   const generateNews = (
-    comments: string = "BREAKING NEWS! Ninja got a low taper fadeeee",
+    messages: string = "BREAKING NEWS! Ninja got a low taper fadeeee",
+    messages: string = "BREAKING NEWS! Ninja got a low taper fadeeee",
   ) => {
     return {
       name: 'LLAMANEWS',
       age: 100,
       occupation: 'News Reporter',
       interests: ['eating grass'],
-      comments: comments,
+      messages: messages,
+      messages: messages,
       personality: ["oe: 0.6", "co: 0.8", "ex: 0.4", "ag: 0.7", "ne: 0.3"],
       education: 'LLama uni',
       profilePicture: '/profiles/llama_feeders.png',
     };
-
   };
 
   const handlePromptChange = (newPrompt: string) => {
     setPrompt(newPrompt);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && prompt.trim() !== "") {
+  const handleButtonPress = () => {
+  const handleButtonPress = () => {
       setIsGenerating(true);
       setStart(true);
 
       createNewEvent();
-      setPosts([generateRandomPost()]);
-    }
   };
 
   const createNewEvent = async () => {
@@ -134,14 +214,46 @@ const Home: React.FC = () => {
     if (isGenerating) {
       let counter = 0;
   
-      const interval = setInterval(() => {
-        if (counter % 10 === 0) {
-          // Call the alternate function every 10 seconds
-          setPosts((prevPosts) => [generateNews(), ...prevPosts]);
-        } else {
-          // Default behavior
-          setPosts((prevPosts) => [generateRandomPost(), ...prevPosts]);
+      const interval = setInterval(async () => {
+
+        try {
+          const response = await fetch(config.getEventsEndpoint);
+          
+          if (!response.ok) {
+            throw new Error(`Error: ${response.status} - ${response.statusText}`);
+          }
+        
+          const data : getData[] = await response.json(); 
+          console.log(data); 
+
+          setPosts(posts => [...data, ...posts]);
+
+          
+        } catch (error) {
+          console.error('Fetch error:', error); 
         }
+        
+
+      const interval = setInterval(async () => {
+
+        try {
+          const response = await fetch(config.getEventsEndpoint);
+          
+          if (!response.ok) {
+            throw new Error(`Error: ${response.status} - ${response.statusText}`);
+          }
+        
+          const data : getData[] = await response.json(); 
+          console.log(data); 
+
+          setPosts(posts => [...data, ...posts]);
+
+          
+        } catch (error) {
+          console.error('Fetch error:', error); 
+        }
+        
+
         counter += updateInterval / 1000; // Increment based on interval in seconds
       }, updateInterval);
   
@@ -170,7 +282,6 @@ const Home: React.FC = () => {
             id="prompt"
             value={prompt}
             onChange={(e) => handlePromptChange(e.target.value)}
-            onKeyDown={handleKeyDown}
             placeholder="Enter an Event"
             className="border px-2 py-1 rounded text-gray-900 dark:text-white bg-white dark:bg-gray-800 w-full resize-none overflow-auto min-h-[50px] max-h-[300px]
                        shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all duration-300"
@@ -193,6 +304,14 @@ const Home: React.FC = () => {
             onChange={(e) => setUpdateInterval(Number(e.target.value))}
             className="border px-2 py-1 rounded text-gray-900 dark:text-white bg-white dark:bg-gray-800"
           />
+          <button className="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 ml-3" onClick={handleButtonPress}>
+            Update
+          </button>
+
+          <button className="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 ml-3" onClick={handleButtonPress}>
+            Update
+          </button>
+
           {/* Show Stop Generating Button when generating is active */}
           {isGenerating && start && (
             <button
