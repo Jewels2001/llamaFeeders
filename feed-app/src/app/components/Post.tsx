@@ -78,14 +78,14 @@ const Post: React.FC<PostProps> = ({ author, commentContent, profilePicture}) =>
                         <p>
                             <strong>Interests:</strong> {userData?.Interests.join(", ")}
                         </p>
-                        <p>
+                        <div>
                             <strong>Personality</strong> 
                             <p>Openness {userData?.Personality.oe}</p>
                             <p>Conscientiousness{userData?.Personality.co}</p>
                             <p>Extraversion{userData?.Personality.ex}</p>
                             <p>Agreeableness{userData?.Personality.ag}</p>
                             <p>Neuroticism{userData?.Personality.ne}</p>
-                        </p>
+                        </div>
                         </div>
                     )}
 

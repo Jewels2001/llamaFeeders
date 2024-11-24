@@ -56,15 +56,19 @@ func (a *Agent) generateSystemPrompt() error {
 	return nil
 }
 
-func (a *Agent) GeneratePost(postContext []platform.Post) (platform.Post, error) {
+func (a *Agent) GeneratePost(events, posts []platform.Post) (platform.Post, error) {
 	var postsText string
-	for _, post := range postContext {
+	for _, post := range posts {
 		postsText += "\n" + post.String()
+	}
+	var eventsText string
+	for _, event := range events {
+		eventsText += "\n" + event.Message
 	}
 
 	context := []inference.OllamaMsg{
 		{Role: "system", Content: a.systemPrompt},
-		{Role: "user", Content: fmt.Sprintf(inference.PROMPT_AGENT_POST_FORMAT, postsText)},
+		{Role: "user", Content: fmt.Sprintf(inference.PROMPT_AGENT_POST_FORMAT, eventsText, postsText)},
 	}
     // log.Println("CONTEXT:", context)
 
