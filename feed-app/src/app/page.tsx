@@ -13,15 +13,19 @@ interface PostData {
   occupation: string;
   interests: string[];
   comments: string;
-  personality: string[];
+  personality: Personality;
   education: string;
-  profilePicture: string; 
+  profilePicture: string
 }
 
-interface NewsProps{
-    name: string;
-    news: string;
+interface Personality{
+    oe: number ,
+    co: number ,
+    ex: number ,
+    ag: number ,
+    ne: number 
 }
+
 
 const images = [ 
  '/profiles/Anonymous-Profile-pic.jpg',
@@ -43,7 +47,7 @@ const Home: React.FC = () => {
     occupations: string | string[] = ["Engineer", "Doctor", "Artist", "Teacher", "Designer"],
     interestsList:  string[] = ["Reading", "Traveling", "Gaming", "Cooking", "Sports"],
     comments: string = "Great post!",
-    personality: string[] = ["oe: 0.6", "co: 0.8", "ex: 0.4", "ag: 0.7", "ne: 0.3"],
+    personality: Personality = {'oe': 0.6, 'co': 0.8, 'ex': 0.4, 'ag': 0.7, 'ne' : 0.3},
     education: string = 'Batchlor'
   ): PostData => {
     
@@ -132,8 +136,9 @@ const Home: React.FC = () => {
             throw new Error(`Error: ${response.status} - ${response.statusText}`);
           }
         
-          const data = await response.json(); 
+          const data : PostData = await response.json(); 
           console.log(data); 
+
           setPosts(posts => [data, ...posts]);
 
           
