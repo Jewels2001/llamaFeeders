@@ -6,16 +6,25 @@ import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import PlayCircleFilledWhiteIcon from "@mui/icons-material/PlayCircleFilledWhite";
 import config from "../config.json";
 
+interface getData {
+  author: string;
+  messages: string;
+  commentId: string;
+}
 interface PostData {
-  name: string;
+  author: string;
+  messages: string;
+  commentId: string;
+  profilePicture: string;
+}
+interface userInfo{
+  author: string;
   age: number;
   occupation: string;
   interests: string[];
-  comments: string;
   personality: Personality;
   education: string;
   profilePicture: string;
-  id: string;
 }
 
 interface Personality{
@@ -34,46 +43,61 @@ const images = [
 ]
 
 const Home: React.FC = () => {
-  const [posts, setPosts] = useState<PostData[]>([]);
+  const [posts, setPosts] = useState<getData[]>([]);
   const [updateInterval, setUpdateInterval] = useState<number>(4000);
   const [prompt, setPrompt] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [start, setStart] = useState<boolean>(false);
 
-  // Mock function to generate random posts
+  // // Mock function to generate random posts
+  // const generateRandomPost = (
+  //   author: string | string[] = ["Alice", "Bob", "Charlie", "Dana", "Eve"],
+  //   occupations: string | string[] = ["Engineer", "Doctor", "Artist", "Teacher", "Designer"],
+  //   interestsList:  string[] = ["Reading", "Traveling", "Gaming", "Cooking", "Sports"],
+  //   messages: string = "Great post!",
+  //   personality: Personality = {'oe': 0.6, 'co': 0.8, 'ex': 0.4, 'ag': 0.7, 'ne' : 0.3},
+  //   education: string = 'Batchlor',
+  //   id: string = '112'
+  // ): PostData => {
+    
+  //   return {
+  //     name: author[Math.floor(Math.random() * author.length)],
+  //     age: Math.floor(Math.random() * 40) + 20,
+  //     occupation: occupations[Math.floor(Math.random() * occupations.length)],
+  //     interests: interestsList.sort(() => 0.5 - Math.random()).slice(0, 2),
+  //     messages: messages,
+  //     personality: personality,
+  //     education: education,
+  //     profilePicture: images[Math.floor(Math.random() * images.length)],
+  //     id: id,
+  //   };
+
+  // };
+
   const generateRandomPost = (
-    Username: string | string[] = ["Alice", "Bob", "Charlie", "Dana", "Eve"],
-    occupations: string | string[] = ["Engineer", "Doctor", "Artist", "Teacher", "Designer"],
-    interestsList:  string[] = ["Reading", "Traveling", "Gaming", "Cooking", "Sports"],
-    comments: string = "Great post!",
-    personality: Personality = {'oe': 0.6, 'co': 0.8, 'ex': 0.4, 'ag': 0.7, 'ne' : 0.3},
-    education: string = 'Batchlor',
+    Author: string | string[] = ["Alice", "Bob", "Charlie", "Dana", "Eve"],
+    messages: string = "Great post!",
     id: string = '112'
   ): PostData => {
     
     return {
-      name: Username[Math.floor(Math.random() * Username.length)],
-      age: Math.floor(Math.random() * 40) + 20,
-      occupation: occupations[Math.floor(Math.random() * occupations.length)],
-      interests: interestsList.sort(() => 0.5 - Math.random()).slice(0, 2),
-      comments: comments,
-      personality: personality,
-      education: education,
+      author: Author[Math.floor(Math.random() * Author.length)],
+      messages: messages,
       profilePicture: images[Math.floor(Math.random() * images.length)],
-      id: id,
+      commentId: id,
     };
 
   };
 
   const generateNews = (
-    comments: string = "BREAKING NEWS! Ninja got a low taper fadeeee",
+    messages: string = "BREAKING NEWS! Ninja got a low taper fadeeee",
   ) => {
     return {
       name: 'LLAMANEWS',
       age: 100,
       occupation: 'News Reporter',
       interests: ['eating grass'],
-      comments: comments,
+      messages: messages,
       personality: ["oe: 0.6", "co: 0.8", "ex: 0.4", "ag: 0.7", "ne: 0.3"],
       education: 'LLama uni',
       profilePicture: '/profiles/llama_feeders.png',
@@ -130,10 +154,10 @@ const Home: React.FC = () => {
             throw new Error(`Error: ${response.status} - ${response.statusText}`);
           }
         
-          const data : PostData = await response.json(); 
+          const data : getData[] = await response.json(); 
           console.log(data); 
 
-          setPosts(posts => [data, ...posts]);
+          setPosts(posts => [...data, ...posts]);
 
           
         } catch (error) {

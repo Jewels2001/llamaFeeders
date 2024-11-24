@@ -20,7 +20,7 @@ interface Personality{
     ne: number 
 }
 
-const Post: React.FC<PostProps> = ({ name, age, occupation, interests, comments, personality, education, profilePicture, id}) => {
+const Post: React.FC<PostProps> = ({ name, comments, id, profilePicture}) => {
     const [isHovered, setIsHovered] = useState(false);
     return (
         <div className="flex justify-center items-center">
