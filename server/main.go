@@ -60,25 +60,31 @@ func main() {
 
     http.HandleFunc("/api/getEvents", getEventsEndpoint)
     http.HandleFunc("/api/createNewEvent", createNewEvent)
+    http.HandleFunc("/api/getUserData", getUserData)
     log.Fatal(http.ListenAndServe(":8081", nil))
 }
 
+func setHeaders(w* http.ResponseWriter) {
+    (*w).Header().Set("Content-Type", "application/json")
+    (*w).Header().Set("Access-Control-Allow-Origin", "*")
+    (*w).Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+    (*w).Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+}
+
 func getEventsEndpoint(w http.ResponseWriter, r* http.Request) {
+    setHeaders(&w)
     data, err := json.Marshal(posts)
     if err != nil {
         log.Println("Error getting events:", err)
         w.WriteHeader(http.StatusInternalServerError)
     }
-
-    w.Header().Set("Content-Type", "application/json")
-    w.Header().Set("Access-Control-Allow-Origin", "*")
-    w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-    w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
     w.WriteHeader(http.StatusOK)
     w.Write(data)
 }
 
 func createNewEvent(w http.ResponseWriter, r* http.Request) {
+    setHeaders(&w)
+
     type Event struct{
         Text string `json:"eventText"`
     }
@@ -95,10 +101,29 @@ func createNewEvent(w http.ResponseWriter, r* http.Request) {
     mu.Unlock()
     log.Println(post.String())
 
-    w.Header().Set("Content-Type", "application/json")
-    w.Header().Set("Access-Control-Allow-Origin", "*")
-    w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-    w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
     w.WriteHeader(http.StatusOK)
     w.Write([]byte("Event sucesfully created"))
+}
+
+func getUserData(w http.ResponseWriter, r* http.Request) {
+    setHeaders(&w)
+
+    username := r.URL.Query().Get("Author")
+    if username == "" {
+        w.WriteHeader(http.StatusBadRequest)
+        return
+    }
+    agent, ok := agent.Agents[username]
+    if !ok {
+        w.WriteHeader(http.StatusNoContent)
+        w.Write([]byte("User not found"))
+    }
+    
+    data, err := json.Marshal(agent)
+    if err != nil {
+        log.Println("Error getting events:", err)
+        w.WriteHeader(http.StatusInternalServerError)
+    }
+    w.WriteHeader(http.StatusOK)
+    w.Write(data)
 }
