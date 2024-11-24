@@ -45,12 +45,12 @@ func main() {
             }
 
             if len(posts) > MaxPostsLen {
-                posts = posts[1:]
+                posts = posts[len(posts)-MaxPostsLen:]
             }
         }
     }()
 
-    http.HandleFunc("/api/getEventsEndpoint", getEventsEndpoint)
+    http.HandleFunc("/api/getEvents", getEventsEndpoint)
     log.Fatal(http.ListenAndServe(":8081", nil))
 }
 
