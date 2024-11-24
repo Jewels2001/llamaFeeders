@@ -26,7 +26,7 @@ func main() {
 	}
 }
 
-dataFeed = `{[
+const dataFeed = `{[
         {
                 "username": "Bookworm95",
                 "comments" : "Nice post",
@@ -39,7 +39,7 @@ dataFeed = `{[
         },
         ]}`
 
-dataUser = `
+const dataUser = `
 {
     "username" : "BookWorm96",
     "age": 25,
