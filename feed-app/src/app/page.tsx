@@ -5,6 +5,7 @@ import Post from "@components/Post";
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import PlayCircleFilledWhiteIcon from "@mui/icons-material/PlayCircleFilledWhite";
 import config from "../config.json";
+import SentimentAnalysis from "./components/SentAnalysis";
 
 interface getData {
   Author: string;

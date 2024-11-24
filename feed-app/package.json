@@ -15,12 +15,14 @@
     "@mui/material": "^6.1.8",
     "next": "15.0.3",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react-dom": "^18.0.0",
+    "sentiment": "^5.0.2"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/sentiment": "^5.0.4",
     "eslint": "^8",
     "eslint-config-next": "15.0.3",
     "postcss": "^8",
