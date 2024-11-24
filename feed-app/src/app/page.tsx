@@ -250,6 +250,7 @@ const Home: React.FC = () => {
             </button>
           ))}
         </ul>
+        <SentimentAnalysis messages={posts.map((post) => post.Message)} />
       </div>
     </div>
   );

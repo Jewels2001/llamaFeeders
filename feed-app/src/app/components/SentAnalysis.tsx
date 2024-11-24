@@ -43,7 +43,7 @@ const SentimentAnalysis: React.FC<MsgDetails> = ({ messages }) => {
                 hashtagToSentiment[hashtag] = [result];
             }});
     });
-
+    console.log(hashtagToSentiment.value);
     return hashtagToSentiment;
 
   }
@@ -60,7 +60,7 @@ const SentimentAnalysis: React.FC<MsgDetails> = ({ messages }) => {
   }
 
   return (
-    <div className="bg-blue-400 w-min h-min">
+    <div className="bg-blue-400 w-max h-max">
         <ul>
         {Object.entries(sentiment(messages)).map(([key, value]) => (
           <li key={key}>
