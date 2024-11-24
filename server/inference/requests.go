@@ -81,6 +81,7 @@ func GetCompletion(prompt string, format string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+    // log.Println("PROMPT:", prompt)
 
 	r, err := http.NewRequest("POST", ollamaURL+"generate/", bytes.NewBuffer(body))
 	if err != nil {
@@ -100,6 +101,7 @@ func GetCompletion(prompt string, format string) (string, error) {
 	if err = json.NewDecoder(res.Body).Decode(&resp); err != nil {
 		return "", err
 	}
+    // log.Println("RESP:", resp.Response)
 
 	return resp.Response, nil
 }

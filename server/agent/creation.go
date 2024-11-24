@@ -1,8 +1,11 @@
 package agent
 
 import (
-    "fmt"
-    "log"
+	"encoding/json"
+	"fmt"
+	"log"
+
+	"github.com/Jewels2001/LlamaFeeders/server/inference"
 )
 
 var Agents []Agent
@@ -22,6 +25,7 @@ func GenerateAgents(numAgents int) error {
             }
             continue
         }
+        newAgent.generateSystemPrompt()
     
         Agents = append(Agents, newAgent)
         num_failed = 0
@@ -29,4 +33,14 @@ func GenerateAgents(numAgents int) error {
     }
 
     return nil
+}
+
+func CreateAgent() (newAgent Agent, err error) {
+	data, err := inference.GetCompletion(inference.PROMPT_AGENT_CREATION, "json")
+	if err != nil {
+		return
+	}
+
+	err = json.Unmarshal([]byte(data), &newAgent)
+	return
 }
