@@ -3,9 +3,9 @@ package platform
 import "fmt"
 
 type Post struct {
-	Author  string
-	Message string
-	ID      int
+	Author  string `json:"Author"`
+	Message string `json:"Message"`
+	ID      int    `json:"ID"`
 }
 
 var postNum int = 0

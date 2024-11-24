@@ -48,6 +48,7 @@ func GetChatCompletion(messages []OllamaMsg) (*OllamaMsg, error) {
 	if err != nil {
 		return nil, err
 	}
+    // log.Println("MESSAGES:", string(body))
 
 	r, err := http.NewRequest("POST", ollamaURL+"chat/", bytes.NewBuffer(body))
 	if err != nil {
