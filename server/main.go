@@ -50,7 +50,7 @@ func main() {
         }
     }()
 
-    http.HandleFunc("/api/getEventsEndpoint", getEventsEndpoint)
+    http.HandleFunc("/api/getEvents", getEventsEndpoint)
     log.Fatal(http.ListenAndServe(":8081", nil))
 }
 
