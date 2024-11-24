@@ -8,14 +8,14 @@ import config from "../config.json";
 
 interface getData {
   Author: string;
-  messages: string;
-  commentId: number;
+  Message: string;
+  Id: number;
 }
 
 interface PostData {
   Author: string;
-  messages: string;
-  commentId: string;
+  Message: string;
+  Id: string;
   profilePicture: string;
 }
 
@@ -35,15 +35,15 @@ const Home: React.FC = () => {
 
   const generateRandomPost = (
     Author: string | string[] = ["Alice", "Bob", "Charlie", "Dana", "Eve"],
-    messages: string = "Great post!",
+    Message: string = "Great post!",
     id: string = '112'
   ): PostData => {
     
     return {
       Author: Author[Math.floor(Math.random() * Author.length)],
-      messages: messages,
+      Message: Message,
       profilePicture: fakeImages[Math.floor(Math.random() * fakeImages.length)],
-      commentId: id,
+      Id: id,
     };
 
   };
@@ -75,21 +75,20 @@ const Home: React.FC = () => {
   };
 
   const createNewEvent = async () => {
-      console.log("TODO: uncomment and test endpoint");
 
-      // const response = await fetch(config.createNewEventEndpoint, {
-      //   method: 'POST', // Specify the request method
-      //   headers: {
-      //     'Content-Type': 'application/json', // Indicate we're sending JSON
-      //   },
-      //   body: JSON.stringify({ eventText: prompt }), // Convert JavaScript object to JSON string
-      // });
+      const response = await fetch(config.createNewEventEndpoint, {
+        method: 'POST', // Specify the request method
+        headers: {
+          'Content-Type': 'application/json', // Indicate we're sending JSON
+        },
+        body: JSON.stringify({ eventText: prompt }), // Convert JavaScript object to JSON string
+      });
 
-      // if (response.ok) {
-      //   console.log('Event created successfully');
-      // } else {
-      //   console.error('Failed to create event');
-      // }
+      if (response.ok) {
+        console.log('Event created successfully');
+      } else {
+        console.error('Failed to create event');
+      }
 
   };
 
@@ -233,7 +232,7 @@ const Home: React.FC = () => {
       {/* main post stuff */}
       <div className="space-y-4">
         {posts.map((post, index) => (
-          <Post key={index} {...{author : post.Author, commentContent: post.messages, id: post.commentId, profilePicture: getPfpPath(post.Author)}} />
+          <Post key={index} {...{author : post.Author, commentContent: post.Message, id: post.Id, profilePicture: getPfpPath(post.Author)}} />
         ))}
       </div>
        {/* Task bar at the side post stuff */}
