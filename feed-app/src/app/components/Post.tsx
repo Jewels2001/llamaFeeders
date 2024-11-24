@@ -42,13 +42,13 @@ const Post: React.FC<PostProps> = ({ author, commentContent, profilePicture}) =>
         const data: userInfo = await response.json();
         setUserData(data);
       }
-
+    
     return (
         <div className="flex justify-center items-center">
-            <div className={`border p-4 rounded-lg shadow-md ${author == "LLAMANEWS" ? "bg-blue-300" : "bg-white"} max-w-[50%] w-full`}>
+            <div className={`border p-4 rounded-lg shadow-md ${author == "LLAMANEWS" ? "bg-blue-300" : "bg-white"} max-w-[90%] w-full`}>
                 {/* Profile Picture and Name Container */}
                 <div className="flex items-center">
-                    {/* Profile Picture */}
+                {/* Profile Picture */}
                 
                  <img
                 src={`imgs/picsum_images/${profilePicture}`}

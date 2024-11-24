@@ -33,12 +33,13 @@ const fakeImages = [
 const Home: React.FC = () => {
   const [posts, setPosts] = useState<getData[]>([]);
   const [allevents, setEvents] = useState<getData[]>([]);
-  const [updateInterval, setUpdateInterval] = useState<number>(4000);
+  const [updateInterval, setUpdateInterval] = useState<number>(1000);
   const [prompt, setPrompt] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [start, setStart] = useState<boolean>(false);
   const [currevent, setcurrevent] = useState<string>("No Events Yet");
   const queueRef = useRef<getData[]>([]);
+  const isGeneratingRef = useRef(isGenerating); 
   const [postQueue, setPostQueue] = useState<getData[]>([]);
 
   const generateRandomPost = (
@@ -77,12 +78,11 @@ const Home: React.FC = () => {
   const handleButtonPress = () => {
       setIsGenerating(true);
       setStart(true);
-
       createNewEvent();
   };
 
   const createNewEvent = async () => {
-
+      console.log('Testing', JSON.stringify({ eventText: prompt }));
       const response = await fetch(config.createNewEventEndpoint, {
         method: 'POST', // Specify the request method
         headers: {
@@ -91,6 +91,7 @@ const Home: React.FC = () => {
         body: JSON.stringify({ eventText: prompt }), // Convert JavaScript object to JSON string
       });
 
+      
       if (response.ok) {
         console.log('Event created successfully');
       } else {
@@ -100,14 +101,21 @@ const Home: React.FC = () => {
   };
 
   const getPfpPath = (author: string): string => {
-
     const authorToNum = (author.charCodeAt(0) % 100) + 1;
     return `image_${authorToNum}.jpg`;
   }
 
 
   const stopGenerating = () => {
+
     setIsGenerating(false);
+
+    // when paused, upload all the backlog
+    if( queueRef.current.length != 0){
+      const newPosts = queueRef.current; 
+      setPosts(prevPosts => [...newPosts,...prevPosts]);
+    }
+
   };
 
   const startGenerating = () => {
@@ -128,6 +136,10 @@ const Home: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    // Update ref whenever isGenerating changes
+    isGeneratingRef.current = isGenerating;
+  }, [isGenerating]);
   // Add a new post every interval once generating starts
   useEffect(() => {
     if (isGenerating) {
@@ -150,13 +162,15 @@ const Home: React.FC = () => {
           // setPosts(posts => [...events, ...newposts, ...posts]);
           setPostQueue((prevQueue) => [...prevQueue, ...newposts]);
           queueRef.current = [...queueRef.current, ...newposts];
+
           // update the events to this
           setEvents(pastevents => [...events, ...pastevents])
+
           // send in post every 1 s 
           const processQueueInterval = setInterval(() => {
             if (queueRef.current.length > 0) {
               const nextPost = queueRef.current.shift(); // Remove the first post from the queue
-              if (nextPost) {
+              if (nextPost && isGeneratingRef.current) {
                 setPosts((prevPosts) => [nextPost, ...prevPosts]); // Add it to the feed
               }
             }
@@ -187,16 +201,9 @@ const Home: React.FC = () => {
           className="w-32 h-auto mb-4"
         />
       </div>
-      <h1 className="text-3xl font-bold text-center mb-6 text-black dark:text-black">
+      <h1 className="text-3xl font-bold text-center mb-6 text-black dark:text-black ml-[200px]">
         Live LLAMA Feed
       </h1>
-      {/* Current Events Section
-      <div className=" bg-gray-100 dark:bg-gray-800 p-3 rounded-lg shadow-md max-w-3xl mx-auto">
-        <h2 className="text-2xl font-semibold mb-2 text-gray-700 dark:text-gray-300">
-          Current Event:
-        </h2>
-        <p className="text-lg text-gray-600 dark:text-gray-400">{currevent}</p>
-      </div> */}
       <div className="fixed mx-auto bottom-0 left-0 right-0 bg-white dark:bg-gray-800 bg-opacity-100 p-4 shadow-lg z-50 rounded-lg w-full max-w-[60%] bottom-4 p-4">
         {/* Prompt input */}
         <div className="text-center mb-4">
@@ -259,9 +266,9 @@ const Home: React.FC = () => {
         </div>
       </div>
       {/* main post stuff */}
-        <div className="flex flex-wrap justify-left space-x-5">
+        <div className="flex flex-wrap justify-end space-x-5">
           {/* Posts Feed */}
-          <div className="w-full md:w-1/2 space-y-4">
+          <div className="w-full md:w-2/4 space-y-4">
             <h2 className="text-xl font-bold mb-4 text-center">Posts Feed</h2>
             {posts.map((post, index) => (
                 <Post key={`post-${index}`} {...{ author: post.Author, commentContent: post.Message, profilePicture: getPfpPath(post.Author) }}/>
