@@ -56,35 +56,35 @@ func UserPosts(quit chan struct{}) {
 	for {
 		select {
 		case <-ticker.C:
-            var wg sync.WaitGroup
+            // var wg sync.WaitGroup
 			for _, curAgent := range agent.Agents {
-                wg.Add(1)
-                go func() {
-                    eventsMu.Lock()
-                    curEvents := make([]platform.Post,10)
-                    copy(curEvents, events[max(0,len(events)-10):])
-                    eventsMu.Unlock()
+                /* wg.Add(1)
+                go func() { */
+                eventsMu.Lock()
+                curEvents := make([]platform.Post,10)
+                copy(curEvents, events[max(0,len(events)-10):])
+                eventsMu.Unlock()
 
+                postsMu.Lock()
+                curPosts := make([]platform.Post,20)
+                copy(curPosts, posts[max(0,len(posts)-20):])
+                postsMu.Unlock()
+
+                post, err := curAgent.GeneratePost(curEvents, curPosts)
+                if err != nil {
+                    log.Printf("Error generating post for user %s: %v", curAgent.Username, err)
+                }
+
+                if !strings.Contains(post.Message, "NO_RESPONSE") && post.Message != "" && len(post.Message) < 280 {
+                    fmt.Println(post.String())
                     postsMu.Lock()
-                    curPosts := make([]platform.Post,20)
-                    copy(curPosts, posts[max(0,len(posts)-20):])
+                    posts = append(posts, post)
                     postsMu.Unlock()
-
-                    post, err := curAgent.GeneratePost(curEvents, curPosts)
-                    if err != nil {
-                        log.Printf("Error generating post for user %s: %v", curAgent.Username, err)
-                    }
-
-                    if !strings.Contains(post.Message, "NO_RESPONSE") && post.Message != "" && len(post.Message) < 280 {
-                        fmt.Println(post.String())
-                        postsMu.Lock()
-                        posts = append(posts, post)
-                        postsMu.Unlock()
-                    }
-                    wg.Done()
-                }()
+                }
+                    /* wg.Done()
+                }()*/
 			}
-            wg.Wait()
+            // wg.Wait() 
 
 			if len(posts) > MaxPostsLen {
 				postsMu.Lock()
