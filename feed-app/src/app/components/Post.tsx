@@ -28,6 +28,8 @@ interface Personality{
 
 
 const Post: React.FC<PostProps> = ({ author, commentContent, id, profilePicture}) => {
+    // const imagePaths = Array.from({ length: 100 }, (_, i) => `/images/image_${i + 1}.jpg`);
+
     const [isHovered, setIsHovered] = useState(false);
     const [userData, setUserData] = useState<userInfo | null>(null);
     const getUserData = async (Author: string)=> {
@@ -46,9 +48,10 @@ const Post: React.FC<PostProps> = ({ author, commentContent, id, profilePicture}
                 {/* Profile Picture and Name Container */}
                 <div className="flex items-center">
                     {/* Profile Picture */}
-                <img
-                src={profilePicture}
-                alt={`${author}'s profile`}
+                
+                 <img
+                src={`imgs/picsum_images/${profilePicture}`}
+                alt={`${author}'s profile located at imgs/picsum_images/${profilePicture}`}
                 className="w-16 h-16 rounded-full object-cover"
                 />
                 {/* Name with hover effect */}
