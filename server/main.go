@@ -150,7 +150,6 @@ func createNewEvent(w http.ResponseWriter, r *http.Request) {
 		log.Println("Error creating new event:", err)
 		w.WriteHeader(http.StatusInternalServerError)
 	}
-	log.Println("CREATED EVENT", newEvent)
 
 	post := platform.NewPost("LLAMANEWS", newEvent.Text)
 	eventsMu.Lock()
