@@ -5,6 +5,7 @@ import Post from "@components/Post";
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import PlayCircleFilledWhiteIcon from "@mui/icons-material/PlayCircleFilledWhite";
 import config from "../config.json";
+import SentimentAnalysis from "./components/SentAnalysis";
 
 interface serverR{
   events: getData[];
@@ -37,6 +38,7 @@ const Home: React.FC = () => {
   const [prompt, setPrompt] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [start, setStart] = useState<boolean>(false);
+  const [sentiFlag, setSentiFlag] = useState<boolean>(false);
   const [currevent, setcurrevent] = useState<string>("No Events Yet");
   const queueRef = useRef<getData[]>([]);
   const isGeneratingRef = useRef(isGenerating); 
@@ -124,7 +126,7 @@ const Home: React.FC = () => {
 
   const tasks = [
     "Export all Tweets",
-    "Sentement analysis",
+    "Sentiment analysis",
   ];
 
   const handleClick = (type: string) =>{
@@ -133,6 +135,7 @@ const Home: React.FC = () => {
     }
     if (type === "Sentiment analysis") {
       console.log(type);
+      setSentiFlag(oldflag => !oldflag);
     }
   };
 
@@ -294,7 +297,7 @@ const Home: React.FC = () => {
         ))}
       </div> */}
        {/* Task bar at the side post stuff */}
-      <div className="fixed top-40 left-5 transform -translate-x-0 bg-gray-800 text-white rounded-lg shadow-lg p-4 w-64">
+      <div className="fixed top-40 left-5 transform -translate-x-0 bg-gray-800 text-white rounded-lg shadow-lg p-1 w-64 ">
         <h2 className="text-lg font-bold mb-2">Task List</h2>
         <ul className="list-disc space-y-2">
           {tasks.map((task, index) => (
@@ -307,6 +310,7 @@ const Home: React.FC = () => {
             </button>
           ))}
         </ul>
+        {sentiFlag && <SentimentAnalysis messages={posts.map((post) => post.Message)} />}
       </div>
     </div>
   );
