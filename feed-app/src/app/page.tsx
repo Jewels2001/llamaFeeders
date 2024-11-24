@@ -121,13 +121,6 @@ const Home: React.FC = () => {
       let counter = 0;
   
       const interval = setInterval(async () => {
-        // if (counter % 10 === 0) {
-        //   // Call the alternate function every 10 seconds
-        //   setPosts((prevPosts) => [generateNews(), ...prevPosts]);
-        // } else {
-        //   // Default behavior
-        //   setPosts((prevPosts) => [generateRandomPost(), ...prevPosts]);
-        // }
 
         try {
           const response = await fetch(config.getEventsEndpoint);
