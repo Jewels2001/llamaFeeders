@@ -110,7 +110,7 @@ const Home: React.FC = () => {
 
   const tasks = [
     "Export all Tweets",
-    "Sentement analysis",
+    "Sentiment analysis",
   ];
 
   const handleClick = (type: string) =>{
@@ -237,7 +237,7 @@ const Home: React.FC = () => {
         ))}
       </div>
        {/* Task bar at the side post stuff */}
-      <div className="fixed top-40 left-5 transform -translate-x-0 bg-gray-800 text-white rounded-lg shadow-lg p-4 w-64">
+      <div className="fixed top-40 left-5 transform -translate-x-0 bg-gray-800 text-white rounded-lg shadow-lg p-1 w-64 ">
         <h2 className="text-lg font-bold mb-2">Task List</h2>
         <ul className="list-disc space-y-2">
           {tasks.map((task, index) => (

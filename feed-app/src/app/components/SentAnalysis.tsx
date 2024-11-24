@@ -14,25 +14,29 @@ interface sentiment{
 
 
 const SentimentAnalysis: React.FC<MsgDetails> = ({ messages }) => {
-  const extractHashtags = (messages: string[]): string[] => {
-    const hashtags = messages.flatMap((message) => {
-      const matches = message.match(/#[\w]+/g);
-      return matches || []; // Return matches or an empty array if none
-    });
+    function extractUniqueHashtags(strings: string[]): string[] {
+        const hashtagPattern = /#\w+/g;  // Regex to match hashtags
+        const hashtags = new Set<string>();
+    
+        strings.forEach(str => {
+            const matches = str.match(hashtagPattern);
+            if (matches) {
+                matches.forEach(hashtag => hashtags.add(hashtag.toLowerCase()));  // Adds to set ensuring uniqueness and case-insensitivity
+            }
+        });
+    
+        return Array.from(hashtags);  // Convert set to array and return
+    }
 
-    return Array.from(new Set(hashtags));
-  };
 
-  // Get the unique hashtags
-  const hashtags = extractHashtags(messages);
 
   const sentiment = (messages: string[]) => {
-
+  // Get the unique hashtags
+    const hashtags = extractUniqueHashtags(messages);
     const hashtagToSentiment :Record<string, sentiment[]> = {};
     const sentiment = new Sentiment();
-
+    console.log(hashtags)
     messages.map((message) => {
-
         const result = sentiment.analyze(message);
 
         hashtags.map((hashtag) => {
@@ -60,16 +64,18 @@ const SentimentAnalysis: React.FC<MsgDetails> = ({ messages }) => {
   }
 
   return (
-    <div className="bg-blue-400 w-max h-max">
+    <div className=" w-max h-max">
         <ul>
-        {Object.entries(sentiment(messages)).map(([key, value]) => (
-          <li key={key}>
+        {Object.entries(sentiment(["LOVE LOVE LOVE #LOVE", "HELLO #WORLD"])).map(([key, value]) => (
+          <li key={key} className="mb-3">
+            <h2>{key}</h2>
             <div>
                 <p>average sentiment per msg: {avgSentiment(value)}</p>
             </div>
             <div>
                 <p>average comparative per msg: {avgComparative(value)}</p>
             </div>
+            
           </li>
         ))}
       </ul>
