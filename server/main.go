@@ -45,7 +45,7 @@ func main() {
             }
 
             if len(posts) > MaxPostsLen {
-                posts = posts[1:]
+                posts = posts[len(posts)-MaxPostsLen:]
             }
         }
     }()
