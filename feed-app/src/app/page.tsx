@@ -80,7 +80,7 @@ const Home: React.FC = () => {
     setPrompt(newPrompt);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && prompt.trim() !== "") {
       setIsGenerating(true);
       setStart(true);
@@ -152,14 +152,14 @@ const Home: React.FC = () => {
       <div className="fixed mx-auto bottom-0 left-0 right-0 bg-white dark:bg-gray-800 bg-opacity-100 p-4 shadow-lg z-50 rounded-lg w-full max-w-[60%] bottom-4 p-4">
         {/* Prompt input */}
         <div className="text-center mb-4">
-          <input
-            type="text"
+          <textarea
             id="prompt"
             value={prompt}
             onChange={(e) => handlePromptChange(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Enter an Event"
-            className="border px-2 py-1 rounded text-gray-900 dark:text-white bg-white dark:bg-gray-800  w-[100%]"
+            className="border px-2 py-1 rounded text-gray-900 dark:text-white bg-white dark:bg-gray-800 w-full resize-none overflow-auto min-h-[50px] max-h-[300px]"
+            
           />
         </div>
 
