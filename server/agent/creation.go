@@ -8,9 +8,13 @@ import (
 	"github.com/Jewels2001/LlamaFeeders/server/inference"
 )
 
-var Agents []Agent
+var Agents map[string]Agent
 
 const FailTolerance = 20
+
+func init() {
+    Agents = make(map[string]Agent)
+}
 
 func GenerateAgents(numAgents int) error {
     num_created := 0
@@ -27,7 +31,7 @@ func GenerateAgents(numAgents int) error {
         }
         newAgent.generateSystemPrompt()
     
-        Agents = append(Agents, newAgent)
+        Agents[newAgent.Username] = newAgent
         num_failed = 0
         num_created++
     }

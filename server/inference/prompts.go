@@ -39,9 +39,8 @@ Act as requested by the God
 - DO NOT respond with anything other than ONE short tweet from your perspective, or the text NO_RESPONSE`
 
 const PROMPT_AGENT_POST_FORMAT = `Read the following feed and write a Tweet that may or may not be responding to another tweet in the feed. Tweets are separated by newlines and contain one AUTHOR
-
+There is also a section that contains decsriptions of world events that are currently happening. You can comment on current events in this list.
 - You can tag the author of the tweet using @ if they are not LLAMANEWS.
-- Posts from author: LLAMANEWS are more interesting and should be replied to more often.
 - Be consistent with your Big Five personality traits.
 - Avoid excessive politeness.
 - Your comment may or may not contribute to the conversation.
@@ -56,7 +55,9 @@ assuming a non-native proficiency.
 - Do not exceed the limit. Make it short.
 
 The feed may be empty.
-
-## START TEXT
+## START WORLD EVENTS
 %s
-## END TEXT`
+## END WORLD EVENTS
+## START FEED
+%s
+## END FEED`
