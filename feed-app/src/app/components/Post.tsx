@@ -41,6 +41,7 @@ const Post: React.FC<PostProps> = ({ author, commentContent, profilePicture}) =>
       
         const data: userInfo = await response.json();
         setUserData(data);
+        return true
       }
     
     return (
@@ -67,25 +68,25 @@ const Post: React.FC<PostProps> = ({ author, commentContent, profilePicture}) =>
                     {isHovered && (
                         <div className="absolute top-full left-0 mt-2 w-64 bg-gray-800 text-white text-sm p-2 rounded shadow-md z-10">
                         <p>
-                            <strong>Age:</strong> {userData?.Age}
+                            <strong>Age:</strong> {userData?.Age ?? "N/A"}
                         </p>
                         <p>
-                            <strong>Education</strong> {userData?.Education}
+                            <strong>Education</strong> {userData?.Education?? "N/A"}
                         </p>
                         <p>
-                            <strong>Occupation:</strong> {userData?.Occupation}
+                            <strong>Occupation:</strong> {userData?.Occupation?? "N/A"}
                         </p>
                         <p>
-                            <strong>Interests:</strong> {userData?.Interests.join(", ")}
+                            <strong>Interests:</strong> {(userData?.Interests?? []).join(", ")}
                         </p>
-                        <div>
+                        {/* <div> 
                             <strong>Personality</strong> 
-                            <p>Openness {userData?.Personality.oe}</p>
-                            <p>Conscientiousness{userData?.Personality.co}</p>
-                            <p>Extraversion{userData?.Personality.ex}</p>
-                            <p>Agreeableness{userData?.Personality.ag}</p>
-                            <p>Neuroticism{userData?.Personality.ne}</p>
-                        </div>
+                            <p>Openness {userData?.Personality.oe?? "N/A"}</p>
+                            <p>Conscientiousness{userData?.Personality.co?? "N/A"}</p>
+                            <p>Extraversion{userData?.Personality.ex?? "N/A"}</p>
+                            <p>Agreeableness{userData?.Personality.ag?? "N/A"}</p>
+                            <p>Neuroticism{userData?.Personality.ne?? "N/A"}</p>
+                        </div> */}
                         </div>
                     )}
 
