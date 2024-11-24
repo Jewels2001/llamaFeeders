@@ -66,7 +66,7 @@ const SentimentAnalysis: React.FC<MsgDetails> = ({ messages }) => {
   return (
     <div className=" w-max h-max">
         <ul>
-        {Object.entries(sentiment(["LOVE LOVE LOVE #LOVE", "HELLO #WORLD"])).map(([key, value]) => (
+        {Object.entries(sentiment(messages)).map(([key, value]) => (
           <li key={key} className="mb-3">
             <h2>{key}</h2>
             <div>

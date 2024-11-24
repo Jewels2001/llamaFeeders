@@ -38,6 +38,7 @@ const Home: React.FC = () => {
   const [prompt, setPrompt] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [start, setStart] = useState<boolean>(false);
+  const [sentiFlag, setSentiFlag] = useState<boolean>(false);
   const [currevent, setcurrevent] = useState<string>("No Events Yet");
   const queueRef = useRef<getData[]>([]);
   const [postQueue, setPostQueue] = useState<getData[]>([]);
@@ -126,6 +127,7 @@ const Home: React.FC = () => {
     }
     if (type === "Sentiment analysis") {
       console.log(type);
+      setSentiFlag(oldflag => !oldflag);
     }
   };
 
@@ -301,7 +303,7 @@ const Home: React.FC = () => {
             </button>
           ))}
         </ul>
-        <SentimentAnalysis messages={posts.map((post) => post.Message)} />
+        {sentiFlag && <SentimentAnalysis messages={posts.map((post) => post.Message)} />}
       </div>
     </div>
   );
