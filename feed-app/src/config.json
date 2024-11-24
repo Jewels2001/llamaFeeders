@@ -1,3 +1,4 @@
 {
-    "createNewEventEndpoint" : "http://195.242.13.195/api/v1/llama"
+    "createNewEventEndpoint" : "http://195.242.13.195:8080/api/createNewEvent",
+    "getEventsEndpoint" : "http://195.242.13.195:8080/api/getEvents"
 }
