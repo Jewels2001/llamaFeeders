@@ -75,8 +75,5 @@ func (a *Agent) GeneratePost(postContext []platform.Post) (platform.Post, error)
     
 	//TODO: Post chance
 
-	return platform.Post{
-		Author:  a.Username,
-		Message: msg.Content,
-	}, nil
+	return platform.NewPost(a.Username, msg.Content), nil
 }

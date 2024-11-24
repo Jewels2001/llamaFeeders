@@ -13,5 +13,5 @@ func GenerateEventPost() (Post, error) {
         return Post{}, err
     }
 
-    return Post{Author: "LLAMANEWS", Message: msg.Content}, nil
+    return NewPost("LLAMANEWS", msg.Content), nil
 }
