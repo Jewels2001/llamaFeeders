@@ -11,7 +11,19 @@ interface getData {
   messages: string;
   commentId: string;
 }
+interface getData {
+  author: string;
+  messages: string;
+  commentId: string;
+}
 interface PostData {
+  author: string;
+  messages: string;
+  commentId: string;
+  profilePicture: string;
+}
+interface userInfo{
+  author: string;
   author: string;
   messages: string;
   commentId: string;
@@ -23,10 +35,18 @@ interface userInfo{
   occupation: string;
   interests: string[];
   personality: Personality;
+  personality: Personality;
   education: string;
+  profilePicture: string;
   profilePicture: string;
 }
 
+interface Personality{
+    oe: number ,
+    co: number ,
+    ex: number ,
+    ag: number ,
+    ne: number ,
 interface Personality{
     oe: number ,
     co: number ,
@@ -43,6 +63,7 @@ const images = [
 ]
 
 const Home: React.FC = () => {
+  const [posts, setPosts] = useState<getData[]>([]);
   const [posts, setPosts] = useState<getData[]>([]);
   const [updateInterval, setUpdateInterval] = useState<number>(4000);
   const [prompt, setPrompt] = useState<string>("");
@@ -74,7 +95,35 @@ const Home: React.FC = () => {
 
   // };
 
+  // // Mock function to generate random posts
+  // const generateRandomPost = (
+  //   author: string | string[] = ["Alice", "Bob", "Charlie", "Dana", "Eve"],
+  //   occupations: string | string[] = ["Engineer", "Doctor", "Artist", "Teacher", "Designer"],
+  //   interestsList:  string[] = ["Reading", "Traveling", "Gaming", "Cooking", "Sports"],
+  //   messages: string = "Great post!",
+  //   personality: Personality = {'oe': 0.6, 'co': 0.8, 'ex': 0.4, 'ag': 0.7, 'ne' : 0.3},
+  //   education: string = 'Batchlor',
+  //   id: string = '112'
+  // ): PostData => {
+    
+  //   return {
+  //     name: author[Math.floor(Math.random() * author.length)],
+  //     age: Math.floor(Math.random() * 40) + 20,
+  //     occupation: occupations[Math.floor(Math.random() * occupations.length)],
+  //     interests: interestsList.sort(() => 0.5 - Math.random()).slice(0, 2),
+  //     messages: messages,
+  //     personality: personality,
+  //     education: education,
+  //     profilePicture: images[Math.floor(Math.random() * images.length)],
+  //     id: id,
+  //   };
+
+  // };
+
   const generateRandomPost = (
+    Author: string | string[] = ["Alice", "Bob", "Charlie", "Dana", "Eve"],
+    messages: string = "Great post!",
+    id: string = '112'
     Author: string | string[] = ["Alice", "Bob", "Charlie", "Dana", "Eve"],
     messages: string = "Great post!",
     id: string = '112'
@@ -83,7 +132,10 @@ const Home: React.FC = () => {
     return {
       author: Author[Math.floor(Math.random() * Author.length)],
       messages: messages,
+      author: Author[Math.floor(Math.random() * Author.length)],
+      messages: messages,
       profilePicture: images[Math.floor(Math.random() * images.length)],
+      commentId: id,
       commentId: id,
     };
 
@@ -91,12 +143,14 @@ const Home: React.FC = () => {
 
   const generateNews = (
     messages: string = "BREAKING NEWS! Ninja got a low taper fadeeee",
+    messages: string = "BREAKING NEWS! Ninja got a low taper fadeeee",
   ) => {
     return {
       name: 'LLAMANEWS',
       age: 100,
       occupation: 'News Reporter',
       interests: ['eating grass'],
+      messages: messages,
       messages: messages,
       personality: ["oe: 0.6", "co: 0.8", "ex: 0.4", "ag: 0.7", "ne: 0.3"],
       education: 'LLama uni',
@@ -108,6 +162,7 @@ const Home: React.FC = () => {
     setPrompt(newPrompt);
   };
 
+  const handleButtonPress = () => {
   const handleButtonPress = () => {
       setIsGenerating(true);
       setStart(true);
@@ -179,6 +234,26 @@ const Home: React.FC = () => {
         }
         
 
+      const interval = setInterval(async () => {
+
+        try {
+          const response = await fetch(config.getEventsEndpoint);
+          
+          if (!response.ok) {
+            throw new Error(`Error: ${response.status} - ${response.statusText}`);
+          }
+        
+          const data : getData[] = await response.json(); 
+          console.log(data); 
+
+          setPosts(posts => [...data, ...posts]);
+
+          
+        } catch (error) {
+          console.error('Fetch error:', error); 
+        }
+        
+
         counter += updateInterval / 1000; // Increment based on interval in seconds
       }, updateInterval);
   
@@ -229,6 +304,10 @@ const Home: React.FC = () => {
             onChange={(e) => setUpdateInterval(Number(e.target.value))}
             className="border px-2 py-1 rounded text-gray-900 dark:text-white bg-white dark:bg-gray-800"
           />
+          <button className="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 ml-3" onClick={handleButtonPress}>
+            Update
+          </button>
+
           <button className="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 ml-3" onClick={handleButtonPress}>
             Update
           </button>
