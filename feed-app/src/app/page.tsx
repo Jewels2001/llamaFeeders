@@ -73,21 +73,17 @@ const Home: React.FC = () => {
       education: 'LLama uni',
       profilePicture: '/profiles/llama_feeders.png',
     };
-
   };
 
   const handlePromptChange = (newPrompt: string) => {
     setPrompt(newPrompt);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && prompt.trim() !== "") {
+  const handleButtonPress = () => {
       setIsGenerating(true);
       setStart(true);
 
       createNewEvent();
-      setPosts([generateRandomPost()]);
-    }
   };
 
   const createNewEvent = async () => {
@@ -134,14 +130,32 @@ const Home: React.FC = () => {
     if (isGenerating) {
       let counter = 0;
   
-      const interval = setInterval(() => {
-        if (counter % 10 === 0) {
-          // Call the alternate function every 10 seconds
-          setPosts((prevPosts) => [generateNews(), ...prevPosts]);
-        } else {
-          // Default behavior
-          setPosts((prevPosts) => [generateRandomPost(), ...prevPosts]);
+      const interval = setInterval(async () => {
+        // if (counter % 10 === 0) {
+        //   // Call the alternate function every 10 seconds
+        //   setPosts((prevPosts) => [generateNews(), ...prevPosts]);
+        // } else {
+        //   // Default behavior
+        //   setPosts((prevPosts) => [generateRandomPost(), ...prevPosts]);
+        // }
+
+        try {
+          const response = await fetch(config.getEventsEndpoint);
+          
+          if (!response.ok) {
+            throw new Error(`Error: ${response.status} - ${response.statusText}`);
+          }
+        
+          const data = await response.json(); 
+          console.log(data); 
+          setPosts(posts => [data, ...posts]);
+
+          
+        } catch (error) {
+          console.error('Fetch error:', error); 
         }
+        
+
         counter += updateInterval / 1000; // Increment based on interval in seconds
       }, updateInterval);
   
@@ -170,7 +184,6 @@ const Home: React.FC = () => {
             id="prompt"
             value={prompt}
             onChange={(e) => handlePromptChange(e.target.value)}
-            onKeyDown={handleKeyDown}
             placeholder="Enter an Event"
             className="border px-2 py-1 rounded text-gray-900 dark:text-white bg-white dark:bg-gray-800 w-full resize-none overflow-auto min-h-[50px] max-h-[300px]
                        shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all duration-300"
@@ -193,6 +206,10 @@ const Home: React.FC = () => {
             onChange={(e) => setUpdateInterval(Number(e.target.value))}
             className="border px-2 py-1 rounded text-gray-900 dark:text-white bg-white dark:bg-gray-800"
           />
+          <button className="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 ml-3" onClick={handleButtonPress}>
+            Update
+          </button>
+
           {/* Show Stop Generating Button when generating is active */}
           {isGenerating && start && (
             <button
