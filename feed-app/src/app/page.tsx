@@ -115,6 +115,20 @@ const Home: React.FC = () => {
     setIsGenerating(true);
   };
 
+  const tasks = [
+    "Export all Tweets",
+    "Sentement analysis",
+  ];
+
+  const handleClick = (type: string) =>{
+    if (type === 'Export all Tweets') {
+      console.log(type);
+    }
+    if (type === "Sentiment analysis") {
+      console.log(type);
+    }
+  };
+
   // Add a new post every interval once generating starts
   useEffect(() => {
     if (isGenerating) {
@@ -158,7 +172,8 @@ const Home: React.FC = () => {
             onChange={(e) => handlePromptChange(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Enter an Event"
-            className="border px-2 py-1 rounded text-gray-900 dark:text-white bg-white dark:bg-gray-800 w-full resize-none overflow-auto min-h-[50px] max-h-[300px]"
+            className="border px-2 py-1 rounded text-gray-900 dark:text-white bg-white dark:bg-gray-800 w-full resize-none overflow-auto min-h-[50px] max-h-[300px]
+                       shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all duration-300"
             
           />
         </div>
@@ -206,10 +221,26 @@ const Home: React.FC = () => {
           )}
         </div>
       </div>
+      {/* main post stuff */}
       <div className="space-y-4">
         {posts.map((post, index) => (
           <Post key={index} {...post} />
         ))}
+      </div>
+       {/* Task bar at the side post stuff */}
+      <div className="fixed top-40 left-5 transform -translate-x-0 bg-gray-800 text-white rounded-lg shadow-lg p-4 w-64">
+        <h2 className="text-lg font-bold mb-2">Task List</h2>
+        <ul className="list-disc space-y-2">
+          {tasks.map((task, index) => (
+            <button
+            key={index}
+            onClick={() => handleClick(task)}
+            className="w-full text-left bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
+            >
+              {task}
+            </button>
+          ))}
+        </ul>
       </div>
     </div>
   );
