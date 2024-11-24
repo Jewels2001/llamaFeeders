@@ -1,7 +1,7 @@
 import os
 import requests
 
-download_folder = "feed-app\src\imgs\picsum_images"
+download_folder = "feed-app\public\imgs\picsum_images"
 
 
 # Create a directory to store the images

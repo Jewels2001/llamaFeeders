@@ -7,34 +7,16 @@ import PlayCircleFilledWhiteIcon from "@mui/icons-material/PlayCircleFilledWhite
 import config from "../config.json";
 
 interface getData {
-  author: string;
-  messages: string;
-  commentId: number;
+  Author: string;
+  Message: string;
+  Id: number;
 }
 
 interface PostData {
-  author: string;
-  messages: string;
-  commentId: string;
+  Author: string;
+  Message: string;
+  Id: string;
   profilePicture: string;
-}
-
-interface userInfo{
-  author: string;
-  age: number;
-  occupation: string;
-  interests: string[];
-  personality: Personality;
-  education: string;
-  profilePicture: string;
-}
-
-interface Personality{
-    oe: number ,
-    co: number ,
-    ex: number ,
-    ag: number ,
-    ne: number
 }
 
 const fakeImages = [ 
@@ -53,15 +35,15 @@ const Home: React.FC = () => {
 
   const generateRandomPost = (
     Author: string | string[] = ["Alice", "Bob", "Charlie", "Dana", "Eve"],
-    messages: string = "Great post!",
+    Message: string = "Great post!",
     id: string = '112'
   ): PostData => {
     
     return {
-      author: Author[Math.floor(Math.random() * Author.length)],
-      messages: messages,
+      Author: Author[Math.floor(Math.random() * Author.length)],
+      Message: Message,
       profilePicture: fakeImages[Math.floor(Math.random() * fakeImages.length)],
-      commentId: id,
+      Id: id,
     };
 
   };
@@ -93,6 +75,7 @@ const Home: React.FC = () => {
   };
 
   const createNewEvent = async () => {
+
       const response = await fetch(config.createNewEventEndpoint, {
         method: 'POST', // Specify the request method
         headers: {
@@ -111,9 +94,8 @@ const Home: React.FC = () => {
 
   const getPfpPath = (author: string): string => {
 
-    const basePath = "../imgs/picsum_images/"; 
     const authorToNum = (author.charCodeAt(0) % 100) + 1;
-    return `${basePath}$image_{authorToNum}.jpg`;
+    return `image_${authorToNum}.jpg`;
   }
 
 
@@ -219,10 +201,6 @@ const Home: React.FC = () => {
             Update
           </button>
 
-          <button className="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 ml-3" onClick={handleButtonPress}>
-            Update
-          </button>
-
           {/* Show Stop Generating Button when generating is active */}
           {isGenerating && start && (
             <button
@@ -254,7 +232,7 @@ const Home: React.FC = () => {
       {/* main post stuff */}
       <div className="space-y-4">
         {posts.map((post, index) => (
-          <Post key={index} {...{author : post.author, commentContent: post.messages, id: post.commentId, profilePicture: getPfpPath(post.author)}} />
+          <Post key={index} {...{author : post.Author, commentContent: post.Message, id: post.Id, profilePicture: getPfpPath(post.Author)}} />
         ))}
       </div>
        {/* Task bar at the side post stuff */}
