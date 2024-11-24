@@ -43,7 +43,7 @@ func God(quit chan struct{}) {
 				events = events[len(events)-MaxEventsLen:]
 				eventsMu.Unlock()
 			}
-            
+
 		case <-quit:
 			ticker.Stop()
 			return
@@ -56,35 +56,36 @@ func UserPosts(quit chan struct{}) {
 	for {
 		select {
 		case <-ticker.C:
-            var wg sync.WaitGroup
+			var wg sync.WaitGroup
 			for _, curAgent := range agent.Agents {
-                wg.Add(1)
-                go func() {
-                    eventsMu.Lock()
-                    curEvents := make([]platform.Post,10)
-                    copy(curEvents, events[max(0,len(events)-10):])
-                    eventsMu.Unlock()
+				// wg.Add(1)
+				// go func() {
+				/* eventsMu.Lock()
+				   curEvents := make([]platform.Post,10)
+				   copy(curEvents, events[max(0,len(events)-10):])
+				   eventsMu.Unlock()
 
-                    postsMu.Lock()
-                    curPosts := make([]platform.Post,20)
-                    copy(curPosts, posts[max(0,len(posts)-20):])
-                    postsMu.Unlock()
+				   postsMu.Lock()
+				   curPosts := make([]platform.Post,20)
+				   copy(curPosts, posts[max(0,len(posts)-20):])
+				   postsMu.Unlock()
 
-                    post, err := curAgent.GeneratePost(curEvents, curPosts)
-                    if err != nil {
-                        log.Printf("Error generating post for user %s: %v", curAgent.Username, err)
-                    }
+				   post, err := curAgent.GeneratePost(curEvents, curPosts) */
+				post, err := curAgent.GeneratePost(events[max(0, len(events)-10):], posts[max(0, len(posts)-20):])
+				if err != nil {
+					log.Printf("Error generating post for user %s: %v", curAgent.Username, err)
+				}
 
-                    if !strings.Contains(post.Message, "NO_RESPONSE") && post.Message != "" && len(post.Message) < 280 {
-                        fmt.Println(post.String())
-                        postsMu.Lock()
-                        posts = append(posts, post)
-                        postsMu.Unlock()
-                    }
-                    wg.Done()
-                }()
+				if !strings.Contains(post.Message, "NO_RESPONSE") && post.Message != "" && len(post.Message) < 280 {
+					fmt.Println(post.String())
+					postsMu.Lock()
+					posts = append(posts, post)
+					postsMu.Unlock()
+				}
+				// wg.Done()
+				// }()
 			}
-            wg.Wait()
+			wg.Wait()
 
 			if len(posts) > MaxPostsLen {
 				postsMu.Lock()
@@ -105,7 +106,7 @@ func main() {
 
 	quit := make(chan struct{})
 	go God(quit)
-    go UserPosts(quit)
+	go UserPosts(quit)
 
 	http.HandleFunc("/api/getEvents", getEventsEndpoint)
 	http.HandleFunc("/api/createNewEvent", createNewEvent)
@@ -123,11 +124,11 @@ func setHeaders(w *http.ResponseWriter) {
 
 func getEventsEndpoint(w http.ResponseWriter, r *http.Request) {
 	setHeaders(&w)
-    type Resp struct {
-        Events []platform.Post `json:"events"`
-        Posts []platform.Post `json:"posts"`
-    }
-    resp := Resp{events, posts}
+	type Resp struct {
+		Events []platform.Post `json:"events"`
+		Posts  []platform.Post `json:"posts"`
+	}
+	resp := Resp{events, posts}
 	data, err := json.Marshal(resp)
 	if err != nil {
 		log.Println("Error getting events:", err)
